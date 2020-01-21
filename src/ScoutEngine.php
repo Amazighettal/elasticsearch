@@ -80,6 +80,17 @@ class ScoutEngine extends Engine
     }
 
     /**
+     * Flush all of the model's records from the engine.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function flush($model)
+    {
+        // Not implemented
+    }
+
+    /**
      * Perform the given search on the engine.
      * @param  Builder  $builder
      * @return mixed
