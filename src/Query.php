@@ -307,7 +307,6 @@ class Query
             } else {
                 $this->ignores[] = $arg;
             }
-
         }
 
         $this->ignores = array_unique($this->ignores);
@@ -391,7 +390,6 @@ class Query
             } else {
                 $this->_source[] = $arg;
             }
-
         }
 
         return $this;
@@ -676,7 +674,6 @@ class Query
             }
 
             $search->build();
-
         }
 
         return $this;
@@ -715,7 +712,6 @@ class Query
             $sortFields = array_key_exists("sort", $body) ? $body["sort"] : [];
 
             $body["sort"] = array_unique(array_merge($sortFields, $this->sort), SORT_REGULAR);
-
         }
 
         $this->body = $body;
@@ -865,7 +861,6 @@ class Query
                 "scroll" => $this->scroll,
                 "scroll_id" => $scroll_id
             ]);
-
         } else {
             $result = $this->connection->search($this->query());
         }
@@ -944,7 +939,9 @@ class Query
 
             $new = new Collection($new);
 
-            $new->total = $result["hits"]["total"];
+            $total = $result["hits"]["total"];
+
+            $new->total = is_array($total) ? $total["value"] : $total;
             $new->max_score = $result["hits"]["max_score"];
             $new->took = $result["took"];
             $new->timed_out = $result["timed_out"];
@@ -952,11 +949,9 @@ class Query
             $new->shards = (object)$result["_shards"];
 
             return $new;
-
         } else {
 
             return new Collection([]);
-
         }
     }
 
@@ -989,7 +984,6 @@ class Query
             $model->_score = $data[0]["_score"];
 
             $new = $model;
-
         } else {
             $new = NULL;
         }
@@ -1008,7 +1002,7 @@ class Query
     {
 
         // Check if the request from PHP CLI
-        if(php_sapi_name() == "cli"){
+        if (php_sapi_name() == "cli") {
             $this->take($per_page);
             $page = $page ?: 1;
             $this->skip(($page * $per_page) - $per_page);
@@ -1075,7 +1069,6 @@ class Query
             $data($bulk);
 
             $params = $bulk->body();
-
         } else {
 
             $params = [];
@@ -1093,9 +1086,7 @@ class Query
                 ];
 
                 $params["body"][] = $value;
-
             }
-
         }
 
         return (object)$this->connection->bulk($params);
@@ -1404,7 +1395,6 @@ class Query
                 return $this;
             }
         }
-
     }
 
     /**

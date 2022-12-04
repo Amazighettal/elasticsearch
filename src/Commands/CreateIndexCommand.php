@@ -99,9 +99,7 @@ class CreateIndexCommand extends Command
 
                         ]
                     ]);
-
                 }
-
             }
 
             if (isset($config['mappings'])) {
@@ -115,9 +113,9 @@ class CreateIndexCommand extends Command
                     $client->indices()->putMapping([
                         'index' => $index,
                         'type' => $type,
-                        'body' => $mapping
+                        'body' => $mapping,
+                        "include_type_name" => true
                     ]);
-
                 }
             }
         }
